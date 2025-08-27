@@ -1,6 +1,6 @@
 # GB18030 Encoding/Decoding Library for Moonbit
 
-[![Build Status](https://img.shields.io/github/actions/workflow/status/your-username/gb18030/ci.yml)](https://github.com/your-username/gb18030/actions) [![codecov](https://codecov.io/gh/your-username/gb18030/branch/main/graph/badge.svg)](https://codecov.io/gh/your-username/gb18030)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/0Ayachi0/gb18030/ci.yml)](https://github.com/0Ayachi0/gb18030/actions) [![codecov](https://codecov.io/gh/0Ayachi0/gb18030/branch/main/graph/badge.svg)](https://codecov.io/gh/0Ayachi0/gb18030)
 
 English | [简体中文](README_zh_CN.md)
 
