@@ -52,17 +52,13 @@ pub fn gb18030_to_unicode(gb_code: Int) -> Int {
         // 二级汉字区域 (0x9FA6-0x9FEF)
         if area >= 0xA1 && area <= 0xFE && pos >= 0 && pos <= 189 {
             let offset = (area - 0xA1) * 190 + pos
-            if offset < 0x9FA6 {
-                return 0x9FA6 + offset
-            }
+            return 0x9FA6 + offset
         }
         
         // 用户自定义区域 (0xE000-0xE864)
         if area >= 0xAA && area <= 0xAF && pos >= 0 && pos <= 189 {
             let offset = (area - 0xAA) * 190 + pos
-            if offset < 0xE864 {
-                return 0xE000 + offset
-            }
+            return 0xE000 + offset
         }
     }
     
@@ -94,11 +90,9 @@ pub fn unicode_to_gb18030(unicode: Int) -> Int {
         let offset = unicode - 0x4E00
         let area = offset / 190 + 0x2F
         let pos = offset % 190
-        if area <= 0xA0 && pos <= 189 {
-            let lead = area + 0x81
-            let trail = if pos < 63 { pos + 0x40 } else { pos - 63 + 0x80 }
-            return (lead << 8) | trail
-        }
+        let lead = area + 0x81
+        let trail = if pos < 63 { pos + 0x40 } else { pos - 63 + 0x80 }
+        return (lead << 8) | trail
     }
     
     // 二级汉字区域 (0x9FA6-0x9FEF)
@@ -106,11 +100,9 @@ pub fn unicode_to_gb18030(unicode: Int) -> Int {
         let offset = unicode - 0x9FA6
         let area = offset / 190 + 0xA1
         let pos = offset % 190
-        if area <= 0xFE && pos <= 189 {
-            let lead = area + 0x81
-            let trail = if pos < 63 { pos + 0x40 } else { pos - 63 + 0x80 }
-            return (lead << 8) | trail
-        }
+        let lead = area + 0x81
+        let trail = if pos < 63 { pos + 0x40 } else { pos - 63 + 0x80 }
+        return (lead << 8) | trail
     }
     
     // 用户自定义区域 (0xE000-0xE864)
@@ -118,11 +110,9 @@ pub fn unicode_to_gb18030(unicode: Int) -> Int {
         let offset = unicode - 0xE000
         let area = offset / 190 + 0xAA
         let pos = offset % 190
-        if area <= 0xAF && pos <= 189 {
-            let lead = area + 0x81
-            let trail = if pos < 63 { pos + 0x40 } else { pos - 63 + 0x80 }
-            return (lead << 8) | trail
-        }
+        let lead = area + 0x81
+        let trail = if pos < 63 { pos + 0x40 } else { pos - 63 + 0x80 }
+        return (lead << 8) | trail
     }
     
     // 四字节区域 (0x10000-0x10FFFF)
@@ -133,9 +123,7 @@ pub fn unicode_to_gb18030(unicode: Int) -> Int {
         let b3 = ((offset / 10) % 126) + 0x81
         let b4 = (offset % 10) + 0x30
         
-        if b1 <= 0x84 && b2 <= 0x39 && b3 <= 0xFE && b4 <= 0x39 {
-            return (b1 << 24) | (b2 << 16) | (b3 << 8) | b4
-        }
+        return (b1 << 24) | (b2 << 16) | (b3 << 8) | b4
     }
     
     // 默认返回0x3F3F (问号)
@@ -300,11 +288,8 @@ pub fn decode_to_string(bytes: Array[Int]) -> Result[String, DecodeError] {
                         match trail_byte {
                             Some(tb) => {
                                 if is_gb18030_trail(tb) {
-                                    // 计算GB18030码点
-                                    let gb_code = (b - 0x81) * 190 + (tb - 0x40)
-                                    if tb >= 0x80 {
-                                        let gb_code = (b - 0x81) * 190 + (tb - 0x80) + 63
-                                    }
+                                    // 计算16位GB18030码点
+                                    let gb_code = (b << 8) | tb
                                     // 使用映射表转换字符
                                     let unicode = gb18030_to_unicode(gb_code)
                                     if unicode == 0x3F {
@@ -539,11 +524,8 @@ pub fn decode_to_array(bytes: Array[Int]) -> Result[Array[Char], DecodeError] {
                         match trail_byte {
                             Some(tb) => {
                                 if is_gb18030_trail(tb) {
-                                    // 计算GB18030码点
-                                    let gb_code = (b - 0x81) * 190 + (tb - 0x40)
-                                    if tb >= 0x80 {
-                                        let gb_code = (b - 0x81) * 190 + (tb - 0x80) + 63
-                                    }
+                                    // 计算16位GB18030码点
+                                    let gb_code = (b << 8) | tb
                                     // 使用映射表转换字符
                                     let unicode = gb18030_to_unicode(gb_code)
                                     if unicode == 0x3F {
