@@ -23,7 +23,7 @@
 ## 📥 安装
 
 ```bash
-moon add your-username/gb18030@0.1.0
+moon add 0Ayachi0/GB18030@0.1.0
 ```
 
 ## 🚀 使用指南
